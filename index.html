@@ -12,43 +12,33 @@
 </head>
 <body>
 	<div class="container">
+		<div class="jumbotron">
+			<h1>Austin Metro</h1>
+			<h2></h2>
+		</div>
+		
+	</div>
+	<div class="container">
 
 		<!--   Panel for Train Schedule -->
 	    <div class="panel panel-primary">
-      		<div class="panel-heading">
-
-				<table class="table table-inverse">
+      		<div class="panel-heading">Current Train Schedule
+      		</div>
+      		<div class="panel-body">
+      			<table class="table table-inverse">
 				  <thead>
 				    <tr>
-				      <th>#</th>
-				      <th>First Name</th>
-				      <th>Last Name</th>
-				      <th>Username</th>
+				      <th>Train name</th>
+				      <th>Destination</th>
+				      <th>Frequency(mm)</th>
+				      <th>Minutes Away</th>
 				    </tr>
 				  </thead>
-				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>Mark</td>
-				      <td>Otto</td>
-				      <td>@mdo</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">2</th>
-				      <td>Jacob</td>
-				      <td>Thornton</td>
-				      <td>@fat</td>
-				    </tr>
-				    <tr>
-				      <th scope="row">3</th>
-				      <td>Larry</td>
-				      <td>the Bird</td>
-				      <td>@twitter</td>
-				    </tr>
+				  <tbody id="trainInfo">
+				    
 				  </tbody>
 				</table>
       		</div>
-      		<div class="panel-body">Panel Content</div>
     	</div>
 
 
@@ -65,8 +55,22 @@
 
 				   	<div class="form-group">
 					    <label for="destination">Destination</label>
-					    <input type="text" class="form-control" id="trainName">
+					    <input type="text" class="form-control" id="destination">
 				   	</div>
+
+
+				   	<div class="form-group">
+					    <label for="firstTrainTime">First Train Time (HH:mm - Military Time)</label>
+					    <input type="text" class="form-control" id="firstTrainTime">
+				   	</div>
+
+				   	<div class="form-group">
+					    <label for="frequency">Frequency (mm)</label>
+					    <input type="text" class="form-control" id="frequency">
+				   	</div>
+
+				   	<button id="addTrain" class="btn-submit">Submit</button>
+
   				</form>
       		</div>
     	</div>
