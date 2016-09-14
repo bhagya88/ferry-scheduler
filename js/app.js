@@ -12,20 +12,33 @@ var database = firebase.database();
 
  $(document).ready(function(){
 
- 	var trainName;
- 	var destination;
- 	var firstTrainTime;
- 	var frequency;
 
- 	function addTrain(){
- 		trainName = $('#').val().trim();
- 		$('#').val().trim();
- 		$('#').val().trim();
- 		$('#').val().trim();
+ 	
 
- 	}
+ 	
 
-	$('#addTrain').click(addTrain());	  
+	$('#addTrain').click(function(){
+		console.log("inside addd train");
+		var trainName = $('#trainName').val().trim();
+		var destination = $('#destination').val().trim();
+		var firstTrainName = $('#firstTrainTime').val().trim();
+		var frequency = parseInt($('#frequency').val().trim());
+
+		var convertedTime = new Date(firstTrainTime);
+
+		var newTrain ={
+			trainName: trainName,
+			destination: destination,
+			firstTrainTime: firstTrainName,
+			frequency: frequency
+
+		}
+
+		console.log(trainName);
+		database.ref().push(newTrain);
+
+
+	});  
 
 });
 
