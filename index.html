@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Train Scheduler</title>
+	<title>Ferry Scheduler</title>
 
 	<!--Include Bootsrap  cdn-->
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -12,23 +12,22 @@
 </head>
 <body>
 	<div class="container">
-		<div class="jumbotron">
-			<h1>Austin Metro</h1>
-			<h2></h2>
-		</div>
-		
-	</div>
-	<div class="container">
 
-		<!--   Panel for Train Schedule -->
+		<div class="jumbotron">
+			<h1 class="text-center">Catch a Ferry</h1>
+			<h2 class="text-center"></h2>
+		</div>
+
+
+		<!--   Panel for Ferry Schedule -->
 	    <div class="panel panel-primary">
-      		<div class="panel-heading">Current Train Schedule
+      		<div class="panel-heading">Current Ferry Schedule
       		</div>
       		<div class="panel-body">
       			<table class="table table-inverse">
 				  <thead>
 				    <tr>
-				      <th>Train name</th>
+				      <th>Ferry name</th>
 				      <th>Destination</th>
 				      <th>Frequency(mm)</th>
 				      <th>Next Arrival</th>
@@ -44,15 +43,15 @@
     	</div>
 
 
-    	<!--   Panel for adding a Train -->
+    	<!--   Panel for adding a Ferry -->
     	<div class="panel panel-primary">
-      		<div class="panel-heading">Add Train</div>
+      		<div class="panel-heading">Add Ferry</div>
       		<div class="panel-body">
       			<form>
 
 				  	<div class="form-group">
-					    <label for="trainName">Train Name</label>
-					    <input type="text" class="form-control" id="trainName" maxlength="20" required>
+					    <label for="ferryName">Ferry Name</label>
+					    <input type="text" class="form-control" id="ferryName" maxlength="20" required>
 				   	</div>
 
 				   	<div class="form-group">
@@ -62,13 +61,13 @@
 
 
 				   	<div class="form-group">
-					    <label for="firstTrainTime">First Train Time (HH:mm - Military Time)</label>
-					    <input type="text" class="form-control" id="firstTrainTime"  required>
+					    <label for="firstTrainTime">First Ferry Time (HH:mm - Military Time)</label>
+					    <input type="text" class="form-control" id="firstFerryTime"  required>
 				   	</div>
 
 				   	<div class="form-group">
 					    <label for="frequency">Frequency (mm)</label>
-					    <input type="text" maxlength="4"  class="form-control" id="frequency" required>
+					    <input type="text" maxlength="3"  class="form-control" id="frequency" required>
 				  	</div>
 
 				   	<div class="form-group">
@@ -80,14 +79,12 @@
       		</div>
     	</div>
 
-
     </div>
 
 
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="js/moment.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
-<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/moment.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

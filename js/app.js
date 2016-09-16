@@ -13,12 +13,12 @@ var database = firebase.database();
  $(document).ready(function(){
 
 	
- 	database.ref('trains').on('child_added',function(snapshot){
+ 	database.ref('ferries').on('child_added',function(snapshot){
 
 
- 		var trainName = snapshot.val().trainName;
+ 		var ferryName = snapshot.val().ferryName;
 		var destination = snapshot.val().destination;
-		var firstTrainTime = snapshot.val().firstTrainTime;
+		var firstFerryTime = snapshot.val().firstFerryTime;
 		var frequency = snapshot.val().frequency;
 
 
@@ -29,12 +29,12 @@ var database = firebase.database();
 		var currentTime = moment();
 		console.log("CT:"+currentTime);
 		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
-		console.log("first train time:"+firstTrainTime);
+		console.log("first ferry time:"+firstFerryTime);
 		// First Time (pushed back 1 year to make sure it comes before current time)
-		var firstTimeConverted = moment(firstTrainTime,"HH:mm").subtract(1, "years");
+		var firstTimeConverted = moment(firstFerryTime,"HH:mm").subtract(1, "years");
 		console.log("firstTimeConvertd: "+ firstTimeConverted);
 
-		console.log(moment(firstTrainTime,"HH:mm"));
+		console.log(moment(firstFerryTime,"HH:mm"));
 		// Current Time
 		var currentTime = moment();
 		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
@@ -47,15 +47,15 @@ var database = firebase.database();
 		var tRemainder = diffTime % frequency;
 		console.log(tRemainder);
 
-		// Minute Until Train----------------
+		// Minute Until ferry----------------
 		var tMinutesTillTrain = frequency - tRemainder;
-		console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+		console.log("MINUTES TILL ferry: " + tMinutesTillTrain);
 
-		// Next Train---------------------------------
-		var nextTrainArrivalTime = moment().add(tMinutesTillTrain, "minutes")
-		console.log("ARRIVAL TIME: " + moment(nextTrainArrivalTime).format("HH:mm"));
+		// Next ferry---------------------------------
+		var nextFerryArrivalTime = moment().add(tMinutesTillTrain, "minutes")
+		console.log("ARRIVAL TIME: " + moment(nextFerryArrivalTime).format("HH:mm"));
 
-		console.log("inside on",trainName);
+		console.log("inside on",ferryName);
 
 
 	
@@ -67,10 +67,10 @@ var database = firebase.database();
 		var td5 = $('<td>');
 
 
-		td1.html(trainName);
+		td1.html(ferryName);
 		td2.html(destination);
 		td3.html(frequency);
-		td4.html(nextTrainArrivalTime.format("HH:mm"));
+		td4.html(nextFerryArrivalTime.format("HH:mm"));
 		td5.html(tMinutesTillTrain);
 		
 	
@@ -87,23 +87,23 @@ var database = firebase.database();
 	$('#addTrain').click(function(event){
 		event.preventDefault();
 		
-		var trainName = $('#trainName').val().trim();
+		var ferryName = $('#ferryName').val().trim();
 		var destination = $('#destination').val().trim();
-		var firstTrainTime = $('#firstTrainTime').val().trim();
+		var firstFerryTime = $('#firstFerryTime').val().trim();
 		var frequency = parseInt($('#frequency').val().trim());
 
 		
 
 		var newTrain ={
-			trainName: trainName,
+			ferryName: ferryName,
 			destination: destination,
-			firstTrainTime: firstTrainTime,
+			firstFerryTime: firstFerryTime,
 			frequency: frequency
 
 		}
 
-		console.log(trainName);
-		database.ref('trains').push(newTrain);
+		console.log(ferryName);
+		database.ref('ferries').push(newTrain);
 
 		return false;
 	});  
@@ -111,9 +111,9 @@ var database = firebase.database();
 
 	// $('#trainInfo').on('click','tr',function(event){
 	// 	event.preventDefault();
-	// 	console.log("TRAIN ID",$(this).attr("id"));
-	// 	var trainName = $(this).data("id");
-	// 	var recordReference = database.ref('trains').child(trainName);
+	// 	console.log("ferry ID",$(this).attr("id"));
+	// 	var ferryName = $(this).data("id");
+	// 	var recordReference = database.ref('ferries').child(ferryName);
 	// });  
 
 });
