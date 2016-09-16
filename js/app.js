@@ -59,28 +59,45 @@ var database = firebase.database();
 
 
 	
-		var row = $('<tr>');
-		var td1 = $('<td>');
-		var td2 = $('<td>');
-		var td3 = $('<td>');
-		var td4 = $('<td>');
-		var td5 = $('<td>');
+		// var row = $('<tr>');
+		// var td1 = $('<td>');
+		// var td2 = $('<td>');
+		// var td3 = $('<td>');
+		// var td4 = $('<td>');
+		// var td5 = $('<td>');
 
 
-		td1.html(ferryName);
-		td2.html(destination);
-		td3.html(frequency);
-		td4.html(nextFerryArrivalTime.format("HH:mm"));
-		td5.html(tMinutesTillTrain);
-		
-	
-		row.append(td1);
-		row.append(td2);
-		row.append(td3);
-		row.append(td4);
-		row.append(td5);
+		// td1.html(ferryName);
+		// td2.html(destination);
+		// td3.html(frequency);
+		// td4.html(nextFerryArrivalTime.format("HH:mm"));
+		// td5.html(tMinutesTillTrain);
+		//tMinutesTillTrain
+		// row.attr("id",ferryName);
+		// row.append(td1);
+		// row.append(td2);
+		// row.append(td3);
+		// row.append(td4);
+		// row.append(td5);
 
-		$('#trainInfo').append(row);
+		// $('#ferryInfo').append(row);
+
+		$('#ferryInfo').append(
+        	'<tr id="' + ferryName +'">'+
+        		'<td>' + ferryName + '</td>' +
+        		'<td>' + destination + '</td>' +
+        		'<td>' + frequency + '</td>' +
+        		'<td>' + nextFerryArrivalTime.format("HH:mm") + '</td>' +
+        		'<td>' + tMinutesTillTrain + '</td>' +
+        		 // this is a glyphicon to remove table data
+        		'<td data-id='+ferryName+' class="remove table-remove glyphicon glyphicon-remove delete"></td>' +
+        // this is an update button to update the content
+    			'<td><button data-id='+ferryName+' class="editButton edit-save">edit</button></td>'+
+    		'</tr>');
+  
+
+
+
  	});
 
 
@@ -94,7 +111,7 @@ var database = firebase.database();
 
 		
 
-		var newTrain ={
+		var newFerry ={
 			ferryName: ferryName,
 			destination: destination,
 			firstFerryTime: firstFerryTime,
@@ -103,7 +120,8 @@ var database = firebase.database();
 		}
 
 		console.log(ferryName);
-		database.ref('ferries').push(newTrain);
+		database.ref('ferries').child(ferryName).set(newFerry);
+		//database.ref('ferries').push(newFerry);
 
 		return false;
 	});  
@@ -111,10 +129,58 @@ var database = firebase.database();
 
 	// $('#trainInfo').on('click','tr',function(event){
 	// 	event.preventDefault();
-	// 	console.log("ferry ID",$(this).attr("id"));
+// 	console.log("ferry ID",$(this).attr("id"));
 	// 	var ferryName = $(this).data("id");
 	// 	var recordReference = database.ref('ferries').child(ferryName);
 	// });  
 
+
+ 
+
+
+	$('#ferryInfo').on('click','.edit-save',function(event){
+		event.preventDefault();
+		var ferryName = $(this).data().id;
+		var mode = $(this).html();
+
+		if(mode === "edit"){
+
+		
+			console.log("Ferry ID",ferryName);
+
+			$('#'+ferryName).children().eq(0).attr("contenteditable",true);
+			$('#'+ferryName).children().eq(1).attr("contenteditable",true);
+			$('#'+ferryName).children().eq(2).attr("contenteditable",true);
+				
+			$(this).html("save");
+
+		
+
+		}else if(mode === "save"){
+
+			
+	  			var destination= $('#'+ferryName).children().eq(1).text();
+	  			var frequency = $('#'+ferryName).children().eq(2).text();
+
+				
+
+				
+
+				var updatedFerry ={
+								ferryName: ferryName,
+								destination: destination,
+								frequency: frequency
+
+				}
+
+				database.ref('ferries').child(ferryName).update(updatedFerry);
+				
+				$(this).html("edit");
+			
+
+		}
+
+	});
 });
+
 
