@@ -12,17 +12,19 @@ var database = firebase.database();
 
  $(document).ready(function(){
 
-	
- 	database.ref('trains').on('child_added',function(snapshot){
+
+     
+ 	
+ 	database.ref('trains').on('value',function(snapshot){
+
+ 	snapshot.forEach(function(item) {
+ 		var trainName = item.val().trainName;
+		var destination = item.val().destination;
+		var firstTrainTime = item.val().firstTrainTime;
+		var frequency = item.val().frequency;
 
 
- 		var trainName = snapshot.val().trainName;
-		var destination = snapshot.val().destination;
-		var firstTrainTime = snapshot.val().firstTrainTime;
-		var frequency = snapshot.val().frequency;
-
-
-		
+		//var key = snapshot.name();
 
 		//console.log("key******",key);
 
@@ -56,9 +58,9 @@ var database = firebase.database();
 		console.log("ARRIVAL TIME: " + moment(nextTrainArrivalTime).format("HH:mm"));
 
 		console.log("inside on",trainName);
+ 
 
-
-	
+	 
 		var row = $('<tr>');
 		var td1 = $('<td>');
 		var td2 = $('<td>');
@@ -72,7 +74,6 @@ var database = firebase.database();
 		td3.html(frequency);
 		td4.html(nextTrainArrivalTime.format("HH:mm"));
 		td5.html(tMinutesTillTrain);
-		
 	
 		row.append(td1);
 		row.append(td2);
@@ -81,6 +82,7 @@ var database = firebase.database();
 		row.append(td5);
 
 		$('#trainInfo').append(row);
+	});	
  	});
 
 
@@ -109,12 +111,14 @@ var database = firebase.database();
 	});  
 
 
-	// $('#trainInfo').on('click','tr',function(event){
-	// 	event.preventDefault();
-	// 	console.log("TRAIN ID",$(this).attr("id"));
-	// 	var trainName = $(this).data("id");
-	// 	var recordReference = database.ref('trains').child(trainName);
-	// });  
+	$('#trainInfo').on('click','tr',function(event){
+		event.preventDefault();
+		console.log("TRAIN ID",$(this).attr("id"));
+		var trainName = $(this).data("id");
+		var recordReference = database.ref('trains').child('KRkRfni5m70cBGp0DuM');
+		console.log("TRAIN NAME",recordReference.trainName)
+
+	});  
 
 });
 
