@@ -10,21 +10,26 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
+
+
  $(document).ready(function(){
+ 	var ferryCount=0;
+
+	function getFerryID(){
+		ferryCount++;
+		return 'ferry'+ferryCount;
+	}
 
 	
- 	database.ref('ferries').on('child_added',function(snapshot){
+ 	database.ref('ferries').on('child_added',function(snapshot,prevChildName){
 
-
+ 		var ferryID = snapshot.val().ferryID;
+ 		
  		var ferryName = snapshot.val().ferryName;
 		var destination = snapshot.val().destination;
 		var firstFerryTime = snapshot.val().firstFerryTime;
 		var frequency = snapshot.val().frequency;
 
-
-		
-
-		//console.log("key******",key);
 
 		var currentTime = moment();
 		console.log("CT:"+currentTime);
@@ -58,41 +63,17 @@ var database = firebase.database();
 		console.log("inside on",ferryName);
 
 
-	
-		// var row = $('<tr>');
-		// var td1 = $('<td>');
-		// var td2 = $('<td>');
-		// var td3 = $('<td>');
-		// var td4 = $('<td>');
-		// var td5 = $('<td>');
-
-
-		// td1.html(ferryName);
-		// td2.html(destination);
-		// td3.html(frequency);
-		// td4.html(nextFerryArrivalTime.format("HH:mm"));
-		// td5.html(tMinutesTillTrain);
-		//tMinutesTillTrain
-		// row.attr("id",ferryName);
-		// row.append(td1);
-		// row.append(td2);
-		// row.append(td3);
-		// row.append(td4);
-		// row.append(td5);
-
-		// $('#ferryInfo').append(row);
-
 		$('#ferryInfo').append(
-        	'<tr id="' + ferryName +'">'+
+        	'<tr id="' + ferryID +'">'+
         		'<td>' + ferryName + '</td>' +
         		'<td>' + destination + '</td>' +
         		'<td>' + frequency + '</td>' +
         		'<td>' + nextFerryArrivalTime.format("HH:mm") + '</td>' +
         		'<td>' + tMinutesTillTrain + '</td>' +
         		 // this is a glyphicon to remove table data
-        		'<td data-id='+ferryName+' class="remove table-remove glyphicon glyphicon-remove delete"></td>' +
+        		'<td data-id='+ferryID+' class="remove table-remove glyphicon glyphicon-remove delete"></td>' +
         // this is an update button to update the content
-    			'<td><button data-id='+ferryName+' class="editButton edit-save">edit</button></td>'+
+    			'<td><button data-id='+ferryID+' class="editButton edit-save">edit</button></td>'+
     		'</tr>');
   
 
@@ -101,71 +82,90 @@ var database = firebase.database();
  	});
 
 
+
+ 	//  adds new train to database
+
 	$('#addTrain').click(function(event){
-		event.preventDefault();
+
 		
+		
+		event.preventDefault();
+
+		
+		
+		var ferryID;
+
+		database.ref('counter').once('value', function(snapshot) {
+
+
+			
+			ferryID = snapshot.val().count;
+			console.log("IDDDD",ferryID);
+
+
+			// get user inputs from the form		
 		var ferryName = $('#ferryName').val().trim();
 		var destination = $('#destination').val().trim();
 		var firstFerryTime = $('#firstFerryTime').val().trim();
 		var frequency = parseInt($('#frequency').val().trim());
 
 		
-
+		// create new ferry object
 		var newFerry ={
+			ferryID:ferryID,
 			ferryName: ferryName,
 			destination: destination,
 			firstFerryTime: firstFerryTime,
 			frequency: frequency
 
 		}
+		console.log("newFerry",newFerry);
 
-		console.log(ferryName);
-		database.ref('ferries').child(ferryName).set(newFerry);
-		//database.ref('ferries').push(newFerry);
+			database.ref('ferries').child(ferryID).set(newFerry);
 
+			ferryID++;
+			database.ref('counter').set({count:ferryID});
+			
+
+		});
+
+
+		// create a new train in the databaseferr
+
+		
+		
+		
+		//
 		return false;
+	
 	});  
 
-
-	// $('#trainInfo').on('click','tr',function(event){
-	// 	event.preventDefault();
-// 	console.log("ferry ID",$(this).attr("id"));
-	// 	var ferryName = $(this).data("id");
-	// 	var recordReference = database.ref('ferries').child(ferryName);
-	// });  
-
-
- 
 
 
 	$('#ferryInfo').on('click','.edit-save',function(event){
 		event.preventDefault();
-		var ferryName = $(this).data().id;
+		var ferryID = $(this).data().id;
+
 		var mode = $(this).html();
 
 		if(mode === "edit"){
+	
+			$('#'+ferryID).children().eq(0).attr("contenteditable",true);
+			$('#'+ferryID).children().eq(1).attr("contenteditable",true);
+			$('#'+ferryID).children().eq(2).attr("contenteditable",true);
+			
+			$('#'+ferryID).children().eq(0).addClass('edit');
+			$('#'+ferryID).children().eq(1).addClass('edit');
+			$('#'+ferryID).children().eq(2).addClass('edit');
 
-		
-			console.log("Ferry ID",ferryName);
-
-			$('#'+ferryName).children().eq(0).attr("contenteditable",true);
-			$('#'+ferryName).children().eq(1).attr("contenteditable",true);
-			$('#'+ferryName).children().eq(2).attr("contenteditable",true);
-				
 			$(this).html("save");
-
-		
 
 		}else if(mode === "save"){
 
+				var ferryName= $('#'+ferryID).children().eq(0).text();
+	  			var destination= $('#'+ferryID).children().eq(1).text();
+	  			var frequency = $('#'+ferryID).children().eq(2).text();
 			
-	  			var destination= $('#'+ferryName).children().eq(1).text();
-	  			var frequency = $('#'+ferryName).children().eq(2).text();
-
-				
-
-				
-
 				var updatedFerry ={
 								ferryName: ferryName,
 								destination: destination,
@@ -173,13 +173,22 @@ var database = firebase.database();
 
 				}
 
-				database.ref('ferries').child(ferryName).update(updatedFerry);
-				
+				database.ref('ferries').child(ferryID).update(updatedFerry);
+
 				$(this).html("edit");
 			
 
 		}
 
+	});
+
+	// delete a record
+
+	$('#ferryInfo').on('click','.delete',function(event){
+		event.preventDefault();
+		var ferryID = $(this).data().id;
+		database.ref('ferries/'+ferryID).remove();
+		$('#'+ferryID).remove();
 	});
 });
 
