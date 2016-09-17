@@ -82,7 +82,7 @@ var database = firebase.database();
 
  	//  adds new train to database
 
-	$('#addTrain').click(function(event){
+	$('#addFerryForm').on('submit', function(event){
 
 		event.preventDefault();
 		var ferryID;
