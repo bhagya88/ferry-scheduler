@@ -16,7 +16,7 @@ var database = firebase.database();
 
  $(document).ready(function(){
  	
-	// fetch all ferries from database
+	// sync with database for any new ferries addded
  	database.ref('ferries').on('child_added',function(snapshot,prevChildName){
 
  		var ferryID = snapshot.val().ferryID;
@@ -77,6 +77,73 @@ var database = firebase.database();
 
 
  	});
+
+ 	//sync with database for any ferries updated
+
+ 	database.ref('ferries').on('child_changed',function(snapshot){
+
+ 		var ferryID = snapshot.val().ferryID;
+ 		
+ 		var ferryName = snapshot.val().ferryName;
+		var destination = snapshot.val().destination;
+		var firstFerryTime = snapshot.val().firstFerryTime;
+		var frequency = snapshot.val().frequency;
+
+
+		var currentTime = moment();
+		console.log("CT:"+currentTime);
+		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+		console.log("first ferry time:"+firstFerryTime);
+		// First Time (pushed back 1 year to make sure it comes before current time)
+		var firstTimeConverted = moment(firstFerryTime,"HH:mm").subtract(1, "years");
+		console.log("firstTimeConvertd: "+ firstTimeConverted);
+
+		console.log(moment(firstFerryTime,"HH:mm"));
+		// Current Time
+		var currentTime = moment();
+		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+
+		// Difference between the times
+		var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+		console.log("DIFFERENCE IN TIME: " + diffTime);
+
+		// Time apart (remainder)
+		var tRemainder = diffTime % frequency;
+		console.log(tRemainder);
+
+		// Minute Until ferry----------------
+		var tMinutesTillTrain = frequency - tRemainder;
+		console.log("MINUTES TILL ferry: " + tMinutesTillTrain);
+
+		// Next ferry---------------------------------
+		var nextFerryArrivalTime = moment().add(tMinutesTillTrain, "minutes")
+		console.log("ARRIVAL TIME: " + moment(nextFerryArrivalTime).format("HH:mm"));
+
+		console.log("inside on",ferryName);
+
+		// append the ferries to DOM
+
+		$('#'+ferryID).children().eq(0).html(ferryName);
+		$('#'+ferryID).children().eq(1).html(destination);
+		$('#'+ferryID).children().eq(2).html(frequency);
+		$('#'+ferryID).children().eq(3).html(nextFerryArrivalTime);
+		$('#'+ferryID).children().eq(4).html(tMinutesTillTrain);
+		
+ 	});
+
+// sync with database for any ferries deleted
+
+
+ 	database.ref('ferries').on('child_removed',function(snapshot){
+
+ 		var ferryID = snapshot.val().ferryID;
+ 		
+ 	
+		$('#'+ferryID).remove();
+	
+ 	});
+
+
 
 
 
