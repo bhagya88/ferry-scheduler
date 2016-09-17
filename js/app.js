@@ -138,9 +138,12 @@ var database = firebase.database();
 			$('#'+ferryID).children().eq(1).attr("contenteditable",true);
 			$('#'+ferryID).children().eq(2).attr("contenteditable",true);
 			
+
 			$('#'+ferryID).children().eq(0).addClass('edit');
 			$('#'+ferryID).children().eq(1).addClass('edit');
 			$('#'+ferryID).children().eq(2).addClass('edit');
+
+			$('#'+ferryID).children().eq(0).focus();
 
 			//toggle the edit button to save
 			$(this).html("save");
@@ -163,7 +166,9 @@ var database = firebase.database();
 				//update the database
 
 				database.ref('ferries').child(ferryID).update(updatedFerry);
-
+				$('#'+ferryID).children().eq(0).removeClass('edit');
+				$('#'+ferryID).children().eq(1).removeClass('edit');
+				$('#'+ferryID).children().eq(2).removeClass('edit');
 				//toggle the save button to edit	
 				$(this).html("edit");
 			
