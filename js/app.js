@@ -8,19 +8,15 @@ var config = {
 };
 firebase.initializeApp(config);
 
+
+//set the database variable
 var database = firebase.database();
 
 
 
  $(document).ready(function(){
- 	var ferryCount=0;
-
-	function getFerryID(){
-		ferryCount++;
-		return 'ferry'+ferryCount;
-	}
-
-	
+ 	
+	// fetch all ferries from database
  	database.ref('ferries').on('child_added',function(snapshot,prevChildName){
 
  		var ferryID = snapshot.val().ferryID;
@@ -62,6 +58,7 @@ var database = firebase.database();
 
 		console.log("inside on",ferryName);
 
+		// append the ferries to DOM
 
 		$('#ferryInfo').append(
         	'<tr id="' + ferryID +'">'+
@@ -87,60 +84,47 @@ var database = firebase.database();
 
 	$('#addTrain').click(function(event){
 
-		
-		
 		event.preventDefault();
-
-		
-		
 		var ferryID;
 
+		// generate id for the new ferry by fetching a count from database
 		database.ref('counter').once('value', function(snapshot) {
-
-
-			
 			ferryID = snapshot.val().count;
-			console.log("IDDDD",ferryID);
+			
 
 
 			// get user inputs from the form		
-		var ferryName = $('#ferryName').val().trim();
-		var destination = $('#destination').val().trim();
-		var firstFerryTime = $('#firstFerryTime').val().trim();
-		var frequency = parseInt($('#frequency').val().trim());
+			var ferryName = $('#ferryName').val().trim();
+			var destination = $('#destination').val().trim();
+			var firstFerryTime = $('#firstFerryTime').val().trim();
+			var frequency = parseInt($('#frequency').val().trim());
 
 		
-		// create new ferry object
-		var newFerry ={
-			ferryID:ferryID,
-			ferryName: ferryName,
-			destination: destination,
-			firstFerryTime: firstFerryTime,
-			frequency: frequency
+			// create new ferry object
+			var newFerry ={
+				ferryID:ferryID,
+				ferryName: ferryName,
+				destination: destination,
+				firstFerryTime: firstFerryTime,
+				frequency: frequency
 
-		}
-		console.log("newFerry",newFerry);
-
+			}
+		
+			// add to the database
 			database.ref('ferries').child(ferryID).set(newFerry);
 
 			ferryID++;
+
+			//update the couter in the database 
 			database.ref('counter').set({count:ferryID});
 			
 
 		});
 
 
-		// create a new train in the databaseferr
-
-		
-		
-		
-		//
-		return false;
-	
 	});  
 
-
+	//update and save the selected ferry
 
 	$('#ferryInfo').on('click','.edit-save',function(event){
 		event.preventDefault();
@@ -158,14 +142,17 @@ var database = firebase.database();
 			$('#'+ferryID).children().eq(1).addClass('edit');
 			$('#'+ferryID).children().eq(2).addClass('edit');
 
+			//toggle the edit button to save
 			$(this).html("save");
 
 		}else if(mode === "save"){
 
+				// get updated values from DOM
 				var ferryName= $('#'+ferryID).children().eq(0).text();
 	  			var destination= $('#'+ferryID).children().eq(1).text();
 	  			var frequency = $('#'+ferryID).children().eq(2).text();
 			
+				// updated ferry
 				var updatedFerry ={
 								ferryName: ferryName,
 								destination: destination,
@@ -173,8 +160,11 @@ var database = firebase.database();
 
 				}
 
+				//update the database
+
 				database.ref('ferries').child(ferryID).update(updatedFerry);
 
+				//toggle the save button to edit	
 				$(this).html("edit");
 			
 
@@ -182,7 +172,7 @@ var database = firebase.database();
 
 	});
 
-	// delete a record
+	// delete the selected ferry
 
 	$('#ferryInfo').on('click','.delete',function(event){
 		event.preventDefault();
