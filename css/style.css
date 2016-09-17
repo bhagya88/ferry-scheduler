@@ -1,3 +1,14 @@
 .edit{
 	color: blue;
 }
+
+.bg-ferry{
+	background: transparent;
+	background-size: cover;
+}
+
+
+body{
+	background: url("../images/ferry.jpg");
+	background-size: cover;
+}
