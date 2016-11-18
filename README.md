@@ -1,13 +1,13 @@
 # Ferry Scheduler
 
 ### Overview
-Ferry Schedular is full stack application which hosts live arrival-departure information of ferries. It also lets us to manipulate this inforamtion and also add new ferries, for the purpose of administraion. 
+Ferry Schedular is full stack application which hosts live arrival-departure information of ferries. It also lets user to manipulate this inforamtion and also add new ferries, for the purpose of administraion. 
 
 ### Demo
 [Click to see the demo](https://fierce-hollows-12042.herokuapp.com)
 
 ### Tecnologies used
-* Datebase Firebase
+* Datebase: Firebase
 * JQuery, Javascript
 * HTML5, CSS3, Bootstrap
 
