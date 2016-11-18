@@ -31,11 +31,12 @@ var database = firebase.database();
 		console.log("CT:"+currentTime);
 		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 		console.log("first ferry time:"+firstFerryTime);
+
 		// First Time (pushed back 1 year to make sure it comes before current time)
 		var firstTimeConverted = moment(firstFerryTime,"HH:mm").subtract(1, "years");
 		console.log("firstTimeConvertd: "+ firstTimeConverted);
-
 		console.log(moment(firstFerryTime,"HH:mm"));
+
 		// Current Time
 		var currentTime = moment();
 		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
@@ -59,7 +60,6 @@ var database = firebase.database();
 		console.log("inside on",ferryName);
 
 		// append the ferries to DOM
-
 		$('#ferryInfo').append(
         	'<tr id="' + ferryID +'">'+
         		'<td>' + ferryName + '</td>' +
@@ -69,7 +69,7 @@ var database = firebase.database();
         		'<td>' + tMinutesTillTrain + '</td>' +
         		 // this is a glyphicon to remove table data
         		'<td data-id='+ferryID+' class="remove table-remove glyphicon glyphicon-remove delete"></td>' +
-        // this is an update button to update the content
+        		// this is an update button to update the content
     			'<td><button data-id='+ferryID+' class="editButton edit-save">edit</button></td>'+
     		'</tr>');
   
@@ -79,26 +79,25 @@ var database = firebase.database();
  	});
 
  	//sync with database for any ferries updated
-
  	database.ref('ferries').on('child_changed',function(snapshot){
 
  		var ferryID = snapshot.val().ferryID;
- 		
  		var ferryName = snapshot.val().ferryName;
 		var destination = snapshot.val().destination;
 		var firstFerryTime = snapshot.val().firstFerryTime;
 		var frequency = snapshot.val().frequency;
 
-
+		// set the current time
 		var currentTime = moment();
 		console.log("CT:"+currentTime);
 		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 		console.log("first ferry time:"+firstFerryTime);
+
 		// First Time (pushed back 1 year to make sure it comes before current time)
 		var firstTimeConverted = moment(firstFerryTime,"HH:mm").subtract(1, "years");
 		console.log("firstTimeConvertd: "+ firstTimeConverted);
-
 		console.log(moment(firstFerryTime,"HH:mm"));
+
 		// Current Time
 		var currentTime = moment();
 		console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
@@ -122,7 +121,6 @@ var database = firebase.database();
 		console.log("inside on",ferryName);
 
 		// append the ferries to DOM
-
 		$('#'+ferryID).children().eq(0).html(ferryName);
 		$('#'+ferryID).children().eq(1).html(destination);
 		$('#'+ferryID).children().eq(2).html(frequency);
@@ -131,14 +129,10 @@ var database = firebase.database();
 		
  	});
 
-// sync with database for any ferries deleted
-
-
+	// sync with database for any ferries deleted
  	database.ref('ferries').on('child_removed',function(snapshot){
 
  		var ferryID = snapshot.val().ferryID;
- 		
- 	
 		$('#'+ferryID).remove();
 	
  	});
@@ -148,7 +142,6 @@ var database = firebase.database();
 
 
  	//  adds new train to database
-
 	$('#addFerryForm').on('submit', function(event){
 
 		event.preventDefault();
@@ -192,7 +185,6 @@ var database = firebase.database();
 	});  
 
 	//update and save the selected ferry
-
 	$('#ferryInfo').on('click','.edit-save',function(event){
 		event.preventDefault();
 		var ferryID = $(this).data().id;
@@ -231,7 +223,6 @@ var database = firebase.database();
 				}
 
 				//update the database
-
 				database.ref('ferries').child(ferryID).update(updatedFerry);
 				$('#'+ferryID).children().eq(0).removeClass('edit');
 				$('#'+ferryID).children().eq(1).removeClass('edit');
@@ -245,7 +236,6 @@ var database = firebase.database();
 	});
 
 	// delete the selected ferry
-
 	$('#ferryInfo').on('click','.delete',function(event){
 		event.preventDefault();
 		var ferryID = $(this).data().id;
